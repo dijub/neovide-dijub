@@ -13,4 +13,7 @@
               ▄▄▄▄▄██████████▀
 
 # Requirements
-- [### NEOVIM](https://github.com/neovim/neovim/blob/master/INSTALL.md)
+- [RUST](https://rustup.rs/)
+- [NEOVIM](https://github.com/neovim/neovim/blob/master/INSTALL.md)
+- [NEOVIDE](https://neovide.dev/installation.html)
+
