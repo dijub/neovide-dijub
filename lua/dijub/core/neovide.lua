@@ -9,7 +9,7 @@ vim.g.neovide_floating_z_height = 10
 vim.g.neovide_light_angle_degrees = 45
 vim.g.neovide_light_radius = 5
 
-vim.g.neovide_transparency = 0.85
+vim.g.neovide_transparency = 0.95
 vim.g.neovide_theme = "dark"
 vim.g.neovide_no_idle = true
 vim.g.neovide_remember_window_size = true
