@@ -2,14 +2,14 @@ if not vim.g.neovide then
     return {}
 end
 
-vim.o.guifont = "JetBrainsMono NF Medium:h12"
+vim.o.guifont = "JetBrainsMono NF Medium:h11"
 
 vim.g.neovide_floating_shadow = true
 vim.g.neovide_floating_z_height = 10
 vim.g.neovide_light_angle_degrees = 45
 vim.g.neovide_light_radius = 5
 
-vim.g.neovide_transparency = 0.95
+vim.g.neovide_transparency = 0.98
 vim.g.neovide_theme = "dark"
 vim.g.neovide_no_idle = true
 vim.g.neovide_remember_window_size = true
