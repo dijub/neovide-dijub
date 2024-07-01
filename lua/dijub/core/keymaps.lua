@@ -9,6 +9,8 @@ keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
 keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment Number" }) -- increment
 keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement Number" }) -- decrement
 
+keymap.set("n", "<leader>T", ":10sp term://zsh<CR>", { desc = "Open Terminal" })
+
 -- Window management
 keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" })
 keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" })
@@ -21,6 +23,30 @@ keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" })
 keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" })
 keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" })
 
+-- Java Commands
+
+keymap.set("n", "<leader>jc", "<cmd>JavaCompile<CR>", { desc = "Compile" })
+keymap.set("n", "<leader>jr", "<cmd>JavaRun<CR>", { desc = "Run" })
+
+--
+--
+-- Python Commands
+
+local function newPythonProject()
+    local folderName = vim.fn.input("Project Name: ")
+    vim.fn.mkdir(folderName .. "/src", "p")
+    vim.fn.system("touch " .. folderName .. "/main.py")
+    vim.fn.chdir(folderName)
+    vim.fn.system("python -m venv .venv")
+    vim.cmd("e main.py")
+    vim.cmd(":NvimTreeFindFileToggl<CR>")
+end
+
+vim.api.nvim_create_user_command("PythonCreateProject", newPythonProject, {})
+
+--
+--
+--
 keymap.set("n", "<leader>go", function()
     if vim.bo.filetype == "java" then
         require("jdtls").organize_imports()

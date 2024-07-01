@@ -41,6 +41,7 @@ return {
                 "gitignore",
                 "query",
                 "vimdoc",
+                "java",
                 "c",
             },
             incremental_selection = {
@@ -53,5 +54,14 @@ return {
                 },
             },
         })
+        vim.cmd([[
+    augroup java_indent
+      autocmd!
+      autocmd FileType java setlocal expandtab
+      autocmd FileType java setlocal tabstop=4
+      autocmd FileType java setlocal shiftwidth=4
+      autocmd FileType java setlocal softtabstop=4
+    augroup END
+    ]])
     end,
 }
