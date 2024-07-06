@@ -43,6 +43,7 @@ return {
                 "vimdoc",
                 "java",
                 "c",
+                "xml",
             },
             incremental_selection = {
                 enable = true,

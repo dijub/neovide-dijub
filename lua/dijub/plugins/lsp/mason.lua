@@ -42,6 +42,7 @@ return {
                 "groovyls",
                 "bashls",
                 "yamlls",
+                "lemminx",
             },
         })
 

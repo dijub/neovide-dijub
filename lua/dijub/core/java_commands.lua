@@ -72,6 +72,118 @@ local function javaRun()
     end
 end
 
+local function javaMavenProject()
+    local groupId = vim.fn.input("Group id: ")
+    local artifactId = vim.fn.input("Artifact Id: ")
+    local cmd = "mvn archetype:generate -DgroupId="
+        .. groupId
+        .. " "
+        .. "-DartifactId="
+        .. artifactId
+        .. " "
+        .. "-Dpackaging=jar -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false"
+
+    local output = vim.fn.system(cmd)
+    if vim.v.shell_error ~= 0 then
+        print("Erro ao executar: " .. output)
+    else
+        vim.fn.chdir(artifactId)
+        local subdir = groupId:gsub("%.", "/")
+        local cmd2 = "src/main/java/" .. subdir .. "/App.java"
+        vim.cmd("e " .. cmd2)
+        vim.cmd(":NvimTreeFindFileToggl<CR>")
+    end
+end
+
+local function javaMavenCompile()
+    local output = vim.fn.system("mvn compile")
+    if vim.v.shell_error ~= 0 then
+        print("Erro ao executar: " .. output)
+    else
+        print(output)
+    end
+end
+
+local function javaMavenRun()
+    local pathJava = vim.fn.system("fd -I App.java")
+    pathJava = pathJava:gsub("\n", "")
+    local mainFile = pathJava:gsub("src/main/java/", "")
+    mainFile = mainFile:gsub("%.java", "")
+    mainFile = mainFile:gsub("/", ".")
+
+    local output = vim.fn.system('mvn exec:java -Dexec.mainClass="' .. mainFile .. '"')
+    if vim.v.shell_error ~= 0 then
+        print("Erro ao executar: " .. output)
+    else
+        print(output)
+    end
+end
+
+-- mvn exec:java -Dexec.mainClass="com.jpaproject.App"
+local function javaMavenInstallDependencies()
+    local output = vim.fn.system("mvn clean install")
+    if vim.v.shell_error ~= 0 then
+        print("Erro ao executar: " .. output)
+    else
+        print(output)
+    end
+end
+
+local function newJavaSpringProject()
+    local dependencies = vim.fn.input("Enter dependencies (comma separated): ", "web,data-jpa,h2,thymeleaf")
+    local group_id = vim.fn.input("Enter Group ID: ", "com.example")
+    local artifact_id = vim.fn.input("Enter Artifact ID: ", "myproject")
+    local name = vim.fn.input("Enter project name: ", "myproject")
+    local package_name = vim.fn.input("Enter package name: ", group_id .. ".<myproject>")
+    local project_type = vim.fn.input("Enter project type (maven/gradle): ", "maven")
+
+    if project_type ~= "maven" and project_type ~= "gradle" then
+        print("Invalid project type. Please enter 'maven' or 'gradle'.")
+        return
+    end
+
+    local command = string.format(
+        "spring init --build=%s --dependencies=%s --groupId=%s --artifactId=%s --name=%s --package-name=%s %s",
+        project_type,
+        dependencies,
+        group_id,
+        artifact_id,
+        name,
+        package_name,
+        name
+    )
+
+    local output = vim.fn.system(command)
+    if vim.v.shell_error ~= 0 then
+        print("Erro ao executar: " .. output)
+    else
+        print(output)
+        vim.fn.chdir(name)
+        local pathJava = vim.fn.system("fd -I java src/main/java")
+
+        vim.cmd("e " .. pathJava)
+        vim.cmd(":NvimTreeFindFileToggl<CR>")
+    end
+
+    print("Project created successfully!")
+end
+
+local function javaSpringRun()
+    local command = "./mvnw spring-boot:run"
+    vim.cmd("botright new")
+    vim.fn.termopen(command, {
+        on_exit = function()
+            print("Project created successfully!")
+        end,
+    })
+end
+
 vim.api.nvim_create_user_command("JavaCreateProject", newJavaProject, {})
 vim.api.nvim_create_user_command("JavaCompile", javaCompile, {})
 vim.api.nvim_create_user_command("JavaRun", javaRun, {})
+vim.api.nvim_create_user_command("JavaMavenCreateProject", javaMavenProject, {})
+vim.api.nvim_create_user_command("JavaMavenCompile", javaMavenCompile, {})
+vim.api.nvim_create_user_command("JavaMavenInstallDependencies", javaMavenInstallDependencies, {})
+vim.api.nvim_create_user_command("JavaMavenRun", javaMavenRun, {})
+vim.api.nvim_create_user_command("JavaSpringCreateProject", newJavaSpringProject, {})
+vim.api.nvim_create_user_command("JavaSpringRun", javaSpringRun, {})

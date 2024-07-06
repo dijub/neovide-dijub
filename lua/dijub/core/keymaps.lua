@@ -26,7 +26,11 @@ keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer
 -- Java Commands
 
 keymap.set("n", "<leader>jc", "<cmd>JavaCompile<CR>", { desc = "Compile" })
-keymap.set("n", "<leader>jr", "<cmd>JavaRun<CR>", { desc = "Run" })
+keymap.set("n", "<leader>jm", "<cmd>JavaMavenCompile<CR>", { desc = "Maven Compile" })
+keymap.set("n", "<leader>jr", "<cmd>JavaMavenRun<CR>", { desc = "Maven Run" })
+keymap.set("n", "<leader>js", "<cmd>JavaSpringRun<CR>", { desc = "Spring Run" })
+keymap.set("n", "<leader>ji", "<cmd>JavaMavenInstallDependencies<CR>", { desc = "Maven Install Dependencies" })
+keymap.set("n", "<leader>jj", "<cmd>JavaRun<CR>", { desc = "Run" })
 
 --
 --

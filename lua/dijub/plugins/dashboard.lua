@@ -141,7 +141,9 @@ local alphaDashboard = {
         local dashboard = require("alpha.themes.dashboard")
 
         local dashboardButtonsMain = {
+            dashboard.button("SPC sn", "  -> New Spring Project", "<cmd>JavaSpringCreateProject<CR>"),
             dashboard.button("SPC jn", "  -> New Java Project", "<cmd>JavaCreateProject<CR>"),
+            dashboard.button("SPC mn", "  -> New Maven Project", "<cmd>JavaMavenCreateProject<CR>"),
             dashboard.button("SPC pn", "󰌠  -> New Python Project", "<cmd>PythonCreateProject<CR>"),
             dashboard.button("SPC ee", "  -> Toggle file explorer", "<cmd>NvimTreeToggle<CR>"),
             dashboard.button("SPC ff", "󰱼  -> Find File", "<cmd>Telescope find_files<CR>"),
