@@ -34,9 +34,10 @@ local dijub = {
 
 local colors = {
     lightBlue = "#add8e6",
+    orange = "#ffa500",
 }
 
-vim.api.nvim_set_hl(0, "AlphaHeader", { fg = colors.lightBlue })
+vim.api.nvim_set_hl(0, "AlphaHeader", { fg = colors.orange })
 
 local icons = {
     Python = "󰌠",
@@ -141,7 +142,7 @@ local alphaDashboard = {
         local dashboard = require("alpha.themes.dashboard")
 
         local dashboardButtonsMain = {
-            dashboard.button("SPC sn", "  -> New Spring Project", "<cmd>JavaSpringCreateProject<CR>"),
+            dashboard.button("SPC sn", "  -> New Spring Project", "<cmd>SpringBootNewProject<CR>"),
             dashboard.button("SPC jn", "  -> New Java Project", "<cmd>JavaCreateProject<CR>"),
             dashboard.button("SPC mn", "  -> New Maven Project", "<cmd>JavaMavenCreateProject<CR>"),
             dashboard.button("SPC pn", "󰌠  -> New Python Project", "<cmd>PythonCreateProject<CR>"),

@@ -2,6 +2,7 @@ return {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
+        "williamboman/mason.nvim",
         "hrsh7th/cmp-nvim-lsp",
         { "antosha417/nvim-lsp-file-operations", config = true },
         { "folke/neodev.nvim", opts = {} },
@@ -9,6 +10,7 @@ return {
     config = function()
         -- import lspconfig plugin
         local lspconfig = require("lspconfig")
+        local configs = require("lspconfig.configs")
 
         -- import mason_lspconfig plugin
         local mason_lspconfig = require("mason-lspconfig")
@@ -122,6 +124,7 @@ return {
                         "scss",
                         "less",
                         "svelte",
+                        "htmldjango",
                     },
                 })
             end,
@@ -138,6 +141,55 @@ return {
                             completion = {
                                 callSnippet = "Replace",
                             },
+                        },
+                    },
+                })
+            end,
+            ["jinja_lsp"] = function()
+                vim.filetype.add({
+                    extension = {
+                        jinja = "jinja",
+                        jinja2 = "jinja",
+                        j2 = "jinja",
+                    },
+                })
+                if not configs.jinja_lsp then
+                    configs.jinja_lsp = {
+                        default_config = {
+                            name = "jinja-lsp",
+                            cmd = { "jinja-lsp" },
+                            filetypes = { "jinja", "jinja2", "html" },
+                            root_dir = function(fname)
+                                return "."
+                                --return nvim_lsp.util.find_git_ancestor(fname)
+                            end,
+                            init_options = {
+                                templates = "./templates",
+                                backend = { "./src" },
+                                lang = "python",
+                            },
+                        },
+                    }
+                end
+                lspconfig.jinja_lsp.setup({
+                    capabilities = capabilities,
+                })
+            end,
+            ["ruff_lsp"] = function()
+                local on_attach = function(client, bufnr)
+                    if client.name == "ruff_lsp" then
+                        -- Disable hover in favor of Pyright
+                        client.server_capabilities.hoverProvider = false
+                    end
+                end
+
+                lspconfig.ruff_lsp.setup({
+                    capabilities = capabilities,
+                    on_attach = on_attach,
+                    init_options = {
+                        settings = {
+                            -- Any extra CLI arguments for `ruff` go here.
+                            args = {},
                         },
                     },
                 })

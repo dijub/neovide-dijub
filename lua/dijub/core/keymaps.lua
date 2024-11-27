@@ -9,7 +9,30 @@ keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
 keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment Number" }) -- increment
 keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement Number" }) -- decrement
 
-keymap.set("n", "<leader>T", ":10sp term://zsh<CR>", { desc = "Open Terminal" })
+keymap.set("n", "<leader>T", function()
+    local buf_name = vim.api.nvim_buf_get_name(0)
+    local command = ""
+    if buf_name:match("%.py$") then
+        command = "source ./.venv/bin/activate"
+    end
+
+    -- Open a new terminal window at the bottom
+    vim.cmd("botright split term://zsh")
+
+    -- Get the buffer number of the new terminal
+    local term_bufnr = vim.api.nvim_get_current_buf()
+
+    -- Execute the command in the terminal if there is one
+    if command ~= "" then
+        vim.api.nvim_chan_send(vim.b.terminal_job_id, command .. "\n")
+    end
+
+    -- Optionally, you can set an autocommand to automatically enter insert mode
+    vim.api.nvim_create_autocmd("TermOpen", {
+        buffer = term_bufnr,
+        command = "startinsert",
+    })
+end, { desc = "Open Terminal" })
 
 -- Window management
 keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" })
@@ -36,17 +59,31 @@ keymap.set("n", "<leader>jj", "<cmd>JavaRun<CR>", { desc = "Run" })
 --
 -- Python Commands
 
-local function newPythonProject()
-    local folderName = vim.fn.input("Project Name: ")
-    vim.fn.mkdir(folderName .. "/src", "p")
-    vim.fn.system("touch " .. folderName .. "/main.py")
-    vim.fn.chdir(folderName)
-    vim.fn.system("python -m venv .venv")
-    vim.cmd("e main.py")
-    vim.cmd(":NvimTreeFindFileToggl<CR>")
+local function setVenvOnPath()
+    local nvim_lsp = require("lspconfig")
+    nvim_lsp.pyright.setup({
+        on_attach = function(client, bufnr)
+            -- Set the root directory of your project
+            local root_dir = nvim_lsp.util.root_pattern(
+                ".git",
+                "setup.py",
+                "setup.cfg",
+                "pyproject.toml",
+                "requirements.txt",
+                "main.py",
+                ".venv"
+            )(vim.fn.expand("%:p:h")) or vim.loop.cwd()
+
+            -- Change the pythonPath to the virtual environment interpreter
+            client.config.settings.python.pythonPath = root_dir .. "/.venv/bin/python"
+
+            -- Restart the LSP client to apply the new pythonPath
+            client.notify("workspace/didChangeConfiguration")
+        end,
+    })
 end
 
-vim.api.nvim_create_user_command("PythonCreateProject", newPythonProject, {})
+keymap.set("n", "<leader>pv", "<cmd>VenvSelect<cr>")
 
 --
 --
@@ -67,14 +104,14 @@ keymap.set("n", "<leader>tc", function()
     if vim.bo.filetype == "java" then
         require("jdtls").test_class()
     end
-end)
+end, { desc = "run test class" })
 
 keymap.set("n", "<leader>tm", function()
     if vim.bo.filetype == "java" then
         require("jdtls").test_nearest_method()
     end
-end)
-
+end, { desc = "run test method" })
+--
 -- Debugging
 keymap.set("n", "<leader>bb", "<cmd>lua require'dap'.toggle_breakpoint()<cr>")
 keymap.set("n", "<leader>bc", "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<cr>")

@@ -27,8 +27,8 @@ return {
         mason_lspconfig.setup({
             -- list of servers for mason to install
             ensure_installed = {
-                "tsserver",
                 "html",
+                "bashls",
                 "cssls",
                 "tailwindcss",
                 "svelte",
@@ -43,6 +43,7 @@ return {
                 "bashls",
                 "yamlls",
                 "lemminx",
+                "jinja_lsp",
             },
         })
 
@@ -52,10 +53,13 @@ return {
                 "stylua", -- lua formatter
                 "isort", -- python formatter
                 "black", -- python formatter
+                "blue",
                 "pylint",
                 "eslint_d",
                 "java-debug-adapter",
                 "java-test",
+                "djlint",
+                "ruff",
             },
         })
         vim.api.nvim_command("MasonToolsInstall")

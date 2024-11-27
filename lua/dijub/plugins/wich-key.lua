@@ -5,40 +5,21 @@ return {
         vim.o.timeout = true
         vim.o.timeoutlen = 500
         local wk = require("which-key")
-        wk.register({
-            ["<leader>"] = {
-                c = {
-                    "Actions",
-                },
-                e = {
-                    "Explorer",
-                },
-                f = {
-                    "Find",
-                },
-                h = {
-                    "Git",
-                },
-                m = {
-                    "Format",
-                },
-                n = {
-                    "Clear",
-                },
-                r = { "Rename" },
-                s = {
-                    "Split",
-                },
-                t = {
-                    "Tab",
-                },
-                w = {
-                    "Session",
-                },
-                x = {
-                    "Trouble",
-                },
-            },
+        wk.add({
+            { "<leader>c", desc = "Actions" },
+            { "<leader>e", desc = "Explorer" },
+            { "<leader>f", desc = "Find" },
+            { "<leader>h", desc = "Git" },
+            { "<leader>m", desc = "Format" },
+            { "<leader>n", desc = "Clear" },
+            { "<leader>r", desc = "Rename" },
+            { "<leader>s", desc = "Split" },
+            { "<leader>t", desc = "Tab" },
+            { "<leader>w", desc = "Session" },
+            { "<leader>x", desc = "Trouble" },
+            { "<leader>j", desc = "java" },
+            { "<leader>J", desc = "Java" },
+            { "<leader>p", desc = "python" },
         })
     end,
     opts = {
